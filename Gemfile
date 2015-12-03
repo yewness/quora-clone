@@ -17,6 +17,8 @@ gem 'sinatra-activerecord'
 
 # Adding Database elements
 gem 'pg'
+gem 'bcrypt'
+gem 'sinatra-flash', '~> 0.3.0'
 
 # Adding rake for management
 gem 'rake'

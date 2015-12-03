@@ -1,10 +1,15 @@
-require 'byebug'
-# User login
+require 'byebug' 
+#User login
 
 post '/users/login' do
-	user = User.find_by(email: params[:email], password: params[:password])
-	session[:user_id] = user.id
-	redirect "/users/#{user.id}"
+  user = User.find_by(email: params[:email])
+	if user && user.authenticate(params['password'])
+		session[:user_id] = user.id
+		redirect "/users/#{user.id}"
+	else
+		@error = "Invalid email/password combination"
+		erb :"user/index"
+	end
 end
 
 # User logout
@@ -28,6 +33,7 @@ post '/users' do
 	if user.valid?
 		redirect "/users/#{user.id}"
 	else
+  		@error = user.errors.full_messages
 		redirect "/users/new"
 	end
 end
@@ -43,7 +49,10 @@ end
 
 patch '/users/:id' do
 	user = User.find(params[:id])
-	user.update(name: params[:name], email: params[:email], password: params[:password], description: params[:description])
+	unless params[:password].empty?
+		user.password = params[:password]
+	end
+	user.update(name: params[:name], email: params[:email], description: params[:description])
 	redirect "/users/#{user.id}"
 end
 
@@ -65,5 +74,11 @@ end
 # View login page
 
 get '/users' do
-	erb :'user/index'
+	@user = current_user
+		if logged_in?
+			session[:user_id] = @user.id
+			erb :'user/show'
+		else
+			erb :'user/index'
+		end
 end
