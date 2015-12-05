@@ -1,14 +1,10 @@
 <h1>Edit Post</h1>
 
-<form action="/users/<%= @user.id %>" method="post">
+<form action="/posts/<%= @post.id %>" method="post">
 	<input type="hidden" name="_method" value="patch">
-	<label>Name: </label>
-	<input type="text" name="name" value="<%= @user.name%>"><br>
-	<label>Email: </label>
-	<input type="email" name="email" value="<%= @user.email%>"><br>
-	<label>Password: </label>
-	<input type="password" name="password" value="<%= @user.password%>"><br>
-	<label>Description: </label>
-	<input type="text" name="description" value="<%= @user.description%>"><br>
+	<label>Title: </label>
+	<input type="text" name="title" value="<%= @post.title%>"><br>
+	<label>Content: </label>
+	<textarea name="body" value="<%= @post.body%>"><%= @post.body %></textarea><br>
 	<input type="submit" value="Update profile">
 </form>

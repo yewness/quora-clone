@@ -1,0 +1,19 @@
+<div>
+	<% if logged_in? %>
+		<h4>Welcome, <%= current_user.name %></h4>
+	<% end %>
+</div>
+
+<div align="center">
+	<h1>Top Stories For You</h1>
+	<p>
+		<% Post.all.order(id: :desc).each_with_index do |post, index| %>
+		<tr><%= index + 1%>.
+	    	<strong><a href="/posts/<%= post.id %>"><%= post.title %></a></strong>
+	    	<br><span style="margin-left:1em"></span>
+	    	<%= post.body %><br>
+	    	<%= "-"*100 %>
+		</tr><br>
+		<% end %>
+	</p>
+</div>

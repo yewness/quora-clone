@@ -1,0 +1,13 @@
+<h1>New Answer</h1>
+
+<p>
+	Question:
+	<%= @post.title %>
+</p>
+
+
+<form action="/posts/<%= @post.id%>/answers" method="post">
+	<label>Answer: </label><br>
+	<textarea name="body"></textarea><br>
+	<input type="submit" value="Submit Answer">
+</form>

@@ -1,10 +1,40 @@
-<h1><%= @post.title %></h1>
-by <%= @post.user.name%><br>
+<div>
+	<strong><%= @post.title %></strong>
+	<% if logged_in? %>
+	<a href="/posts/<%= @post.id %>/answers/new"><button>Write your Answer</button></a>
+	<% end %>
+	<br> by <%= @post.user.name %>
+</div>
 
-<%= @post.body %><br>
+<p><%= @post.body %></p>
 
-<a href="/posts/<%= @post.id %>/edit"><button>Edit post</button></a>
-<form action="/posts/<%= @post.id %>" method="post">
-	<input type="hidden" name="_method" value="delete">
-	<input type="submit" value="Delete">
-</form>
+
+<div>
+	<% if session[:user_id] == @post.user.id %>
+		<a href="/posts/<%= @post.id %>/edit"><button>Edit post</button></a>
+		<form action="/posts/<%= @post.id %>" method="post">
+			<input type="hidden" name="_method" value="delete">
+			<input type="submit" value="Delete">
+		</form>
+	<% end %>
+</div>
+
+<br>	
+
+<p>
+	<%= "Answers" %><br>
+	<% @post.answers.each_with_index do |answer,index| %>
+		<tr><%= index + 1%>. <%= answer.body %> --> <a href="/users/<%= answer.user_id %>"><%= answer.user.name %></a>
+		<% if session[:user_id] == answer.user_id %>
+			<a href="/posts/<%= answer.post_id %>/answers/<%= answer.id %>/edit"><button>Edit</button></a>
+		<% end %>
+
+		</tr><br>
+	<% end %>
+</p>
+
+
+<p>
+	<a href="/users/<%= session[:user_id] %>">Go back</a><br>
+	<a href="/posts">See all question</a>
+</p>

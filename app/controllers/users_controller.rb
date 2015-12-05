@@ -1,4 +1,4 @@
-require 'byebug' 
+require 'byebug'
 #User login
 
 post '/users/login' do
@@ -29,13 +29,17 @@ end
 
 post '/users' do
 	user = User.create(name: params[:name], email: params[:email], password: params[:password])
-	
-	if user.valid?
-		redirect "/users/#{user.id}"
-	else
-  		@error = user.errors.full_messages
-		redirect "/users/new"
-	end
+		if user.valid?
+			redirect "/users/#{user.id}"
+		else
+			if user.email == User.find_by_email(params[:email]).email
+		  	@error = "The email is not available."
+				erb :"user/new"
+			elsif user.password.length <= 6
+				@error = "Your password must be at least 6 characters."
+				erb :"user/new"
+			end
+		end
 end
 
 # Display user edit form
@@ -49,9 +53,9 @@ end
 
 patch '/users/:id' do
 	user = User.find(params[:id])
-	unless params[:password].empty?
-		user.password = params[:password]
-	end
+		if params[:password].nil?
+			user.password = params[:password]
+		end
 	user.update(name: params[:name], email: params[:email], description: params[:description])
 	redirect "/users/#{user.id}"
 end
@@ -77,6 +81,7 @@ get '/users' do
 	@user = current_user
 		if logged_in?
 			session[:user_id] = @user.id
+			redirect "/users/#{@user.id}"
 			erb :'user/show'
 		else
 			erb :'user/index'

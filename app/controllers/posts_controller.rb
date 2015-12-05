@@ -1,3 +1,4 @@
+require 'byebug'
 # Display new post form
 
 get '/posts/new' do
@@ -22,7 +23,7 @@ end
 
 patch '/posts/:id' do
 	post = Post.find(params[:id])
-	post.update(title: params[:title], user_id: params[:user_id], body: params[:body])
+	post.update(title: params[:title], body: params[:body])
 	redirect "/posts/#{post.id}"
 end
 
@@ -31,12 +32,18 @@ end
 delete '/posts/:id' do
 	post = Post.find(params[:id])
 	post.destroy
-	erb :'static/index'
+	erb :'post/index'
 end
 
-# View post profile
+# View all post by the id
 
 get '/posts/:id' do
 	@post = Post.find(params[:id])
 	erb :'post/show'
+end
+
+#official index posts
+
+get '/posts' do
+	erb :'post/index'
 end
