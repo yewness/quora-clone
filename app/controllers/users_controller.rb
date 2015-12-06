@@ -7,7 +7,7 @@ post '/users/login' do
 		session[:user_id] = user.id
 		redirect "/users/#{user.id}"
 	else
-		@error = "Invalid email/password combination"
+		@notice = "Invalid email/password combination"
 		erb :"user/index"
 	end
 end
@@ -30,7 +30,8 @@ end
 post '/users' do
 	user = User.create(name: params[:name], email: params[:email], password: params[:password])
 		if user.valid?
-			redirect "/users/#{user.id}"
+			@notice = "Your account was created. Please login."
+			redirect "/users"
 		else
 			if user.email == User.find_by_email(params[:email]).email
 		  	@error = "The email is not available."

@@ -1,31 +1,41 @@
-<h1>User Profile</h1>
+<div>
+	<h1>User Profile</h1>
 
-Name: <%= @user.name %><br>
-Email: <%= @user.email %><br>
-Description:  <%= @user.description %><br><br>
+	Name: <%= @user.name %><br>
+	Email: <%= @user.email %><br>
+	Description:  <%= @user.description %><br><br>
+</div>
 
 <%if current_user.id == @user.id%>
 	<a href="/users/<%= @user.id %>/edit"><button>Edit profile</button></a>
-	<form action="/users/<%= @user.id %>" method="post">
-		<input type="hidden" name="_method" value="delete">
-		<input type="submit" value="Delete">
-	</form>
-	<a href="/users/logout"><button>Logout</button></a><br>
-	<a href="/posts/new"><button>Ask question</button></a><br>
-	<a href="/posts"><button>Write</button></a>
+		<a href="/users/logout"><button>Logout</button></a><br><br>
+		<a href="/posts/new"><button>Ask question</button></a>
+		<a href="/posts"><button>Write</button></a>
+		
+<% end %><br><br>
+
+<p> <u>My Questions</u> 
+	<ul>
+		<% @user.posts.each do |post| %>
+			<li><a href="/posts/<%= post.id %>"><%= post.title %></a></li> 
+		<% end %>
+	</ul>
+</p>
+
+<p> <u>My Answers</u> 
+	<ul>
+		<% @user.answers.each do |answer| %>
+			<li><a href="/posts/<%= answer.post_id %>"><%= answer.post.title %></a> --> <%= answer.post.user.name %><br><%= answer.body %></li>
+		<% end %>
+	</ul>
+</p><br><br>
+
+
+<%if current_user.id == @user.id%>
+<u>Deletion</u> =>
+Warning: There's no turning back after deletion. Are you sure?
+		<form style="display: inline" action="/users/<%= @user.id %>" method="post">
+			<input type="hidden" name="_method" value="delete">
+			<input type="submit" value="Delete">
+		</form>
 <% end %>
-
-<p> My Questions </p>
-<ul>
-	<% @user.posts.each do |post| %>
-		<li><a href="/posts/<%= post.id %>"><%= post.title %></a></li>
-	<% end %>
-</ul>
-
-<p> My Answers </p>
-<ul>
-	<% @user.answers.each do |answer| %>
-		<li><a href="/posts/<%= answer.post_id %>"><%= answer.post.title %></a> --> <%= answer.user.name %><br><%= answer.body %>
-		</li>
-	<% end %>
-</ul>

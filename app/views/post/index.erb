@@ -1,19 +1,27 @@
-<div>
-	<% if logged_in? %>
-		<h4>Welcome, <%= current_user.name %></h4>
-	<% end %>
-</div>
-
 <div align="center">
 	<h1>Top Stories For You</h1>
-	<p>
+	<div>
 		<% Post.all.order(id: :desc).each_with_index do |post, index| %>
 		<tr><%= index + 1%>.
 	    	<strong><a href="/posts/<%= post.id %>"><%= post.title %></a></strong>
-	    	<br><span style="margin-left:1em"></span>
-	    	<%= post.body %><br>
+	    	==> <a href="/users/<% post.user_id %>"><%= post.user.name %></a><br>
+		    	 Total upvotes:
+					<%= PostVote.where(post_id: post.id, vote: 1).count - PostVote.where(post_id: post.id, vote: -1).count %><br>
+					<form style="display: inline" action="/posts/<%= post.id %>/qvote" method="post">
+						<input type="hidden" name=postvote[vote] value=1>
+						<input type="hidden" name=postvote[post_id] value="<%= post.id %>">
+						<input type="hidden" name=postvote[user_id] value="<%= current_user.id %>">
+						<input type="submit" value="Upvote">
+					</form>
+					<form style="display: inline" action="/posts/<%= post.id %>/qvote" method="post">
+						<input type="hidden" name=postvote[vote] value=-1>
+						<input type="hidden" name=postvote[post_id] value="<%= post.id %>">
+						<input type="hidden" name=postvote[user_id] value="<%= current_user.id %>">
+						<input type="submit" value="Downvote">
+					</form>
+					<br><br>
 	    	<%= "-"*100 %>
 		</tr><br>
 		<% end %>
-	</p>
+	</div>
 </div>

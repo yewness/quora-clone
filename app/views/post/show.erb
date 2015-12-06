@@ -1,37 +1,70 @@
 <div>
 	<strong><%= @post.title %></strong>
-	<% if logged_in? %>
-	<a href="/posts/<%= @post.id %>/answers/new"><button>Write your Answer</button></a>
-	<% end %>
-	<br> by <%= @post.user.name %>
+		==> <a href="/users/<%= @post.user_id%>"><%= @post.user.name %></a><br>
+		<%= @post.body %><br>
 </div>
-
-<p><%= @post.body %></p>
-
 
 <div>
 	<% if session[:user_id] == @post.user.id %>
 		<a href="/posts/<%= @post.id %>/edit"><button>Edit post</button></a>
-		<form action="/posts/<%= @post.id %>" method="post">
+		<form style="display: inline" action="/posts/<%= @post.id %>" method="post">
 			<input type="hidden" name="_method" value="delete">
 			<input type="submit" value="Delete">
 		</form>
+	<% else %>
+		<% if logged_in? %>
+			<a href="/posts/<%= @post.id %>/answers/new"><button>Write your Answer</button></a>
+		<% end %>
+	<% end %>
+</div><br>	
+
+<div>
+	<% if logged_in? %>
+			Total question upvotes: <%= post_count %><br>
+			<form style="display: inline" action="/posts/<%= @post.id %>/qvote" method="post">
+				<input type="hidden" name=postvote[vote] value=1>
+				<input type="hidden" name=postvote[post_id] value="<%= @post.id %>">
+				<input type="hidden" name=postvote[user_id] value="<%= current_user.id %>">
+				<input type="submit" value="Upvote">
+			</form>
+			<form style="display: inline" action="/posts/<%= @post.id %>/qvote" method="post">
+				<input type="hidden" name=postvote[vote] value=-1>
+				<input type="hidden" name=postvote[post_id] value="<%= @post.id %>">
+				<input type="hidden" name=postvote[user_id] value="<%= current_user.id %>">
+				<input type="submit" value="Downvote">
+			</form> 
+	<% end %>
+</div><br>
+
+<div>
+	<u><%= "Answers" %></u><br>
+	<% if @post.answers.nil? %>
+	<% else %>
+	<% @post.answers.each_with_index do |answer,index| %>
+		<tr><%= index + 1 %>. <%= answer.body %> ==> <a href="/users/<%= answer.user_id %>"><% answer.user.name %></a>
+			<% if session[:user_id] == answer.user_id %>
+				<a href="/posts/<%= answer.post_id %>/answers/<%= answer.id %>/edit"><button>Edit</button></a><br>
+				<div style="margin-left:1em">
+					Total answer upvotes: 
+					<%= AnswerVote.where(answer_id: answer.id, vote: 1).count - AnswerVote.where(answer_id: answer.id, vote: -1).count %><br>
+					<form style="display: inline" action="/posts/<%= @post.id %>/avote" method="post">
+					   <input type="hidden" name=answervote[vote] value=1>
+					   <input type="hidden" name=answervote[answer_id] value="<%= answer.id %>">
+					   <input type="hidden" name=answervote[user_id] value="<%= current_user.id %>">
+						<input type="submit" value="Upvote">
+				 	</form>
+				 	<form style="display: inline" action="/posts/<%= @post.id %>/avote" method="post">
+				 	   <input type="hidden" name=answervote[vote] value=-1>
+					   <input type="hidden" name=answervote[answer_id] value="<%= answer.id %>">
+					   <input type="hidden" name=answervote[user_id] value="<%= current_user.id %>">
+						<input type="submit" value="Downvote">
+				 	</form>
+				 </div>	
+		 	<% end %>
+		</tr><br><br>
+	<% end %>
 	<% end %>
 </div>
-
-<br>	
-
-<p>
-	<%= "Answers" %><br>
-	<% @post.answers.each_with_index do |answer,index| %>
-		<tr><%= index + 1%>. <%= answer.body %> --> <a href="/users/<%= answer.user_id %>"><%= answer.user.name %></a>
-		<% if session[:user_id] == answer.user_id %>
-			<a href="/posts/<%= answer.post_id %>/answers/<%= answer.id %>/edit"><button>Edit</button></a>
-		<% end %>
-
-		</tr><br>
-	<% end %>
-</p>
 
 
 <p>

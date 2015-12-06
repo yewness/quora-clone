@@ -3,15 +3,35 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Welcome to Quora!</title>
-			<link rel="stylesheet" type="text/css" href="/css/application.css">
-			<script type="text/javascript" src="/js/application.js"></script>
+			<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+			<script type="text/javascript" src="/js/bootstrap.js"></script>
 	</head>
-	<p style="text-align:left;">
-		<font size="20"><strong>Clora</strong></font>
-		<span style="float:right;"><strong>User = <%= current_user.name %></strong></span>
-	</p>
 
-<body>
-	<%= yield %>
-</body>
+	<body>
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="/">Quora</a>
+		    </div>
+		      <ul class="nav navbar-nav">
+		        <li class="active"><a href="/">Home</a></li>
+		        <li style="padding: 2px";"width: 50px">
+			        <form style="margin-top: 12px">
+			            <input type="text" placeholder="Find Question..." required>
+			            <input type="button" value="Search">
+					</form></li>
+			    <li><a href="/posts">Write</a></li>
+			    <li><a href="/posts/new">Ask Question</a></li> 
+			  <ul class="nav navbar-nav navbar-right">
+			    <li><% if logged_in? %>
+					<a href="/users/<%= current_user.id %>"><strong> Logged in: <%= current_user.name %></strong></a>
+					<% end %>
+				</li>
+		      </ul>
+		  </div>
+		</nav>
+	</body>
+	<body style="padding:10px">
+		<%= yield %>
+	</body>
 </html>
