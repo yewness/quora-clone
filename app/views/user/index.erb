@@ -1,11 +1,17 @@
-<h1>Login</h1>
+<body class="background_images">
+	<div class="logo"></div>
+	<div class="login-block">
+		<h1>Login</h1>
 
-<p><%= @notice %></p>
-<form action="/users/login" method="POST">
-	<input type="email" placeholder="Email" name="email"><br>
-	<input type="password" placeholder="Password" name="password"><br>
-	<input type="submit" value="Login">
-</form>
+		<p><%= @notice %></p>
+		<form action="/users/login" method="POST">
+			<input type="email" placeholder="Email" name="email"><br>
+			<input type="password" placeholder="Password" name="password"><br>
+			<input type="submit" value="Login">
+		</form>
 
-<p>Don't have an account? <a href="/users/new">Sign up here!</a>
-</p>
+		<p>
+			Don't have an account? <a href="/users/new">Sign up here!</a>
+		</p>
+	</div>
+</body>

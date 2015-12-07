@@ -66,7 +66,7 @@ end
 delete '/users/:id' do
 	user = User.find(params[:id])
 	user.destroy
-	erb :'static/index'
+	erb :'post/index'
 end
 
 # View user profile

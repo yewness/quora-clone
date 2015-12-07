@@ -1,10 +1,9 @@
 <div>
 	<h1>User Profile</h1>
-
 	Name: <%= @user.name %><br>
 	Email: <%= @user.email %><br>
-	Description:  <%= @user.description %><br><br>
-</div>
+	Description:  <%= @user.description %>
+</div><br><br>
 
 <%if current_user.id == @user.id%>
 	<a href="/users/<%= @user.id %>/edit"><button>Edit profile</button></a>
@@ -25,7 +24,7 @@
 <p> <u>My Answers</u> 
 	<ul>
 		<% @user.answers.each do |answer| %>
-			<li><a href="/posts/<%= answer.post_id %>"><%= answer.post.title %></a> --> <%= answer.post.user.name %><br><%= answer.body %></li>
+			<li><a href="/posts/<%= answer.post_id %>"><%= answer.post.title %></a> --> <%= answer.post.user.name %><br><%= answer.body %></li><br>
 		<% end %>
 	</ul>
 </p><br><br>
@@ -38,4 +37,4 @@ Warning: There's no turning back after deletion. Are you sure?
 			<input type="hidden" name="_method" value="delete">
 			<input type="submit" value="Delete">
 		</form>
-<% end %>
+<% end %><br>

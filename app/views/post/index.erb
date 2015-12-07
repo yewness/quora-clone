@@ -5,13 +5,11 @@
 		<tr><%= index + 1%>.
 	    	<strong><a href="/posts/<%= post.id %>"><%= post.title %></a></strong>
 	    	==> <a href="/users/<% post.user_id %>"><%= post.user.name %></a><br>
-		    	 Total upvotes:
-					<%= PostVote.where(post_id: post.id, vote: 1).count - PostVote.where(post_id: post.id, vote: -1).count %><br>
 					<form style="display: inline" action="/posts/<%= post.id %>/qvote" method="post">
 						<input type="hidden" name=postvote[vote] value=1>
 						<input type="hidden" name=postvote[post_id] value="<%= post.id %>">
 						<input type="hidden" name=postvote[user_id] value="<%= current_user.id %>">
-						<input type="submit" value="Upvote">
+						<input type="submit" value="Upvote | <%= PostVote.where(post_id: post.id, vote: 1).count - PostVote.where(post_id: post.id, vote: -1).count %>">
 					</form>
 					<form style="display: inline" action="/posts/<%= post.id %>/qvote" method="post">
 						<input type="hidden" name=postvote[vote] value=-1>
